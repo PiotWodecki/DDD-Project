@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DDD.CarRentalLib\DDD.CarRentalLib.csproj" />
+    <ProjectReference Include="..\DDD.Base\DDD.Base.csproj" />
+  </ItemGroup>
+
+</Project>
