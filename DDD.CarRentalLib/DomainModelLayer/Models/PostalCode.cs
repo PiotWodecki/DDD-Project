@@ -6,7 +6,7 @@ using DDD.Base.DomainModelLayer.Models;
 
 namespace DDD.CarRentalLib.DomainModelLayer.Models
 {
-    //[Serializable]
+    [Serializable]
     public class PostalCode : ValueObject
     {
         public string FirstPart { get; set; }

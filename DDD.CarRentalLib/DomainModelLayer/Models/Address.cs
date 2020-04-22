@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using DDD.Base.DomainModelLayer.Models;
 using Newtonsoft.Json;
@@ -13,38 +14,37 @@ namespace DDD.CarRentalLib.DomainModelLayer.Models
     public class Address : ValueObject
     {
         [JsonProperty(propertyName: "miejscowosc")]
-        public string miejscowosc { get; private set; }
+        public string Locality { get; private set; }
         [JsonProperty(propertyName: "wojewodztwo")]
-        public string wojewodztwo { get; private set; } //województwo
+        public string Province { get; private set; }
         [JsonProperty(propertyName: "gmina")]
-        public string gmina { get; private set; } //gmina
+        public string Parish { get; private set; } 
         [JsonProperty(propertyName: "powiat")]
-        public string powiat { get;  private set; } //powiat
-        [JsonProperty(propertyName: "kod")]
-        PostalCode PostalCode
-        {
-            get { return PostalCode; }
-            set
-            {
-                var code = value.ToString().Split('-');
-                PostalCode.FirstPart = code[0];
-                PostalCode.SecondPart = code[1]; //value.ToString().Substring(2, 3);
-                this.PostalCode = new PostalCode(code[0], code[1]);
-            }
-        }
-
+        public string County { get;  private set; }
+        //[JsonProperty(propertyName: "kod")]
+        private PostalCode PostalCode { get; set; }
+        //{
+        //    get { return PostalCode; }
+        //    set
+        //    {
+        //        var code = value.ToString().Split('-');
+        //        PostalCode.FirstPart = code[0];
+        //        PostalCode.SecondPart = code[1]; //value.ToString().Substring(2, 3);
+        //        this.PostalCode = new PostalCode(code[0], code[1]);
+        //    }
+        //}
 
         public Address()
         {
             
         }
-        public Address(string miejscowosc, string wojewodztwo, string gmina, string county, PostalCode kod)
+        public Address(string locality, string province, string parish, string county, PostalCode postalCode)
         {
-            this.miejscowosc = miejscowosc;
-            this.wojewodztwo = wojewodztwo;
-            this.gmina = gmina;
-            this.powiat = powiat;
-            PostalCode = kod;
+            this.Locality = locality;
+            this.Province = province;
+            this.Parish = parish;
+            this.County = county;
+            PostalCode = postalCode;
         }
         protected override IEnumerable<object> GetEqualityComponents()
         {
@@ -65,34 +65,10 @@ namespace DDD.CarRentalLib.DomainModelLayer.Models
                 var data = JArray.Parse(json);
                 localities = data.ToObject<List<Address>>();
 
-                //localities = JsonConvert.DeserializeObject<List<Address>>(data);
-                //json = json.Replace("kod", "kod")
-                //    .Replace("miejscowosc", "miejscowosc")
-                //    .Replace("gmina", "gmina")
-                //    .Replace("powiat", "powiat")
-                //    .Replace("wojewodztwo", "wojewodztwo");
-
-                //JsonSerializer serializer = new JsonSerializer();
-                //using (StreamWriter sw = new StreamWriter(Path.Combine(Environment.CurrentDirectory, @"localities2.json")))
-                //using (JsonWriter writer = new JsonTextWriter(sw))
-                //{
-                //    serializer.Serialize(writer, json);
-                //}  
-
-                //localities = JsonConvert.DeserializeObject<List<Address>>(data);
-
-                //json = json.Replace("kod", "kod")
-                //    .Replace("miejscowosc", "miejscowosc")
-                //    .Replace("gmina", "gmina")
-                //    .Replace("powiat", "powiat")
-                //    .Replace("wojewodztwo", "wojewodztwo")
-                //    .Replace(@"\", "")
-                //    .Replace("\n", "")
-                //    .Replace(@"\", "");
-                ////    .Remove(0,1);
-
-                //json = json.Remove(json.Length - 1, 1);
-                //var tmp = JsonConvert.DeserializeObject<Address>(json);
+                foreach (var adress in localities)
+                {
+                    adress.PostalCode = postalCode;
+                }
             }
 
             return localities;

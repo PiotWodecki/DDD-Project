@@ -6,11 +6,26 @@ using DDD.Base.DomainModelLayer.Models;
 
 namespace DDD.CarRentalLib.DomainModelLayer.Models
 {
+    public enum OpenClose
+    {
+        Open,
+        Closed
+    }
     public class Office : AggregateRoot
     {
+        public string Director { get; protected set; }
+        public Address Address { get; set; }
+        public string OpenFrom { get; set; }
+        public string OpenTo { get; set; }
+        public OpenClose IsOpen { get; set; } 
 
-        public Office(Guid id, IDomainEventPublisher domainEventPublisher) : base(id, domainEventPublisher)
+        public Office(Guid id, string director, Address address, string openFrom, string openTo, OpenClose isOpen, IDomainEventPublisher domainEventPublisher) : base(id, domainEventPublisher)
         {
+            Director = director;
+            Address = address;
+            OpenFrom = openFrom;
+            OpenTo = openTo;
+            IsOpen = isOpen;
         }
     }
 }
