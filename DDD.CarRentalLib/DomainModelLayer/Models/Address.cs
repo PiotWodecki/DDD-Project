@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using DDD.Base.DomainModelLayer.Models;
+using DDD.CarRentalLib.InfrastuctureLayer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -22,44 +24,46 @@ namespace DDD.CarRentalLib.DomainModelLayer.Models
         [JsonProperty(propertyName: "powiat")]
         public string County { get;  private set; }
         //[JsonProperty(propertyName: "kod")]
-        private PostalCode PostalCode { get; set; }
-        //{
-        //    get { return PostalCode; }
-        //    set
-        //    {
-        //        var code = value.ToString().Split('-');
-        //        PostalCode.FirstPart = code[0];
-        //        PostalCode.SecondPart = code[1]; //value.ToString().Substring(2, 3);
-        //        this.PostalCode = new PostalCode(code[0], code[1]);
-        //    }
-        //}
+        public PostalCode PostalCode { get; set; }
+        public string Country { get; set; }
+        public string Street { get; set; }
+        public string BuildingNumber { get; set; }
+        public string LocalNumber { get; set; }
 
         public Address()
+        { }
+        
+        public Address(string locality, string province, string parish, string county, PostalCode postalCode,string country, string street, string buildingNumber, string localNumber)
         {
-            
-        }
-        public Address(string locality, string province, string parish, string county, PostalCode postalCode)
-        {
-            this.Locality = locality;
-            this.Province = province;
-            this.Parish = parish;
-            this.County = county;
+            Locality = locality;
+            Province = province;
+            Parish = parish;
+            County = county;
             PostalCode = postalCode;
+            Street = street;
+            BuildingNumber = buildingNumber;
+            LocalNumber = localNumber;
+            County = county;
         }
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            throw new NotImplementedException();
+            yield return PostalCode;
+            yield return County;
+            yield return Locality;
+            yield return Province;
+            yield return Parish;
+            yield return Country;
+            yield return Street;
+            yield return BuildingNumber;
+            yield return LocalNumber;
         }
 
         public IEnumerable<Address> GetLocalitiesByPostalCode(PostalCode postalCode)
         {
+            DownloadHelper.DownloadLocalitiesByPostalCode(postalCode);
             List<Address> localities = new List<Address>();
 
-            Uri url = new Uri("http://kodpocztowy.intami.pl/api/" + $"{ postalCode.FirstPart }-{postalCode.SecondPart}");
-            WebClient webClient = new WebClient();
-            webClient.DownloadFile(url, "localities.json");
-
-            using (StreamReader r = new StreamReader(Path.Combine(Environment.CurrentDirectory, "localities.json")))
+            using (var r = new StreamReader(Path.Combine(Environment.CurrentDirectory, "localities.json")))
             {
                 var json = r.ReadToEnd();
                 var data = JArray.Parse(json);

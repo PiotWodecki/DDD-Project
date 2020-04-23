@@ -7,7 +7,7 @@ namespace DDD.CarRentalLib.ApplicationLayer.DTOs
 {
     public class PhoneNumberDTO
     {
-        public string Number { get; private set; }
-        public DialCodeDTO AreaCode { get; private set; }
+        public string Number { get;  set; }
+        public DialCodeDTO AreaCode { get;  set; }
     }
 }

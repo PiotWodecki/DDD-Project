@@ -9,16 +9,18 @@ namespace DDD.CarRentalLib.InfrastuctureLayer
 {
     public class MemoryCarRentalUoW : ICarRentalUoW
     {
-        public MemoryCarRentalUoW(IRepository<Driver> driverRepository, IRepository<Car> carRepository, IRepository<Rental> rentalRepository)
+        public IRepository<Driver> DriverRepository { get; protected set; }
+        public IRepository<Car> CarRepository { get; protected set; }
+        public IRepository<Rental> RentalRepository { get; protected set; }
+        public IRepository<Office> OfficeRepository { get; }
+        
+        public MemoryCarRentalUoW(IRepository<Driver> driverRepository, IRepository<Car> carRepository, IRepository<Rental> rentalRepository, IRepository<Office> officeRepository)
         {
             DriverRepository = driverRepository;
             CarRepository = carRepository;
             RentalRepository = rentalRepository;
+            OfficeRepository = officeRepository;
         }
-
-        public IRepository<Driver> DriverRepository { get; protected set; }
-        public IRepository<Car> CarRepository { get; protected set; }
-        public IRepository<Rental> RentalRepository { get; protected set; }
 
         public void Commit() { }
         public void Dispose() { }

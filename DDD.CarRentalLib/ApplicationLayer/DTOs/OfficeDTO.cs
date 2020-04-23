@@ -11,10 +11,12 @@ namespace DDD.CarRentalLib.ApplicationLayer.DTOs
     }
     public class OfficeDTO
     {
-        public string Director { get; protected set; }
+        public Guid Id { get; set; }
+        public string Director { get; set; }
         public AddressDTO Address { get; set; }
         public string OpenFrom { get; set; }
         public string OpenTo { get; set; }
         public OpenCloseDTO IsOpen { get; set; }
+        public PhoneNumberDTO PhoneNumber { get; set; }
     }
 }
