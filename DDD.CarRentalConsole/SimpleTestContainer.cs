@@ -17,6 +17,7 @@ namespace DDD.CarRentalConsole
         public IDriverService DriverService { get; }
         public ICarService CarService { get; }
         public IRentalService RentalService { get; }
+        public IOfficeService OfficeService { get; set; }
         public StopRentalService FinishRentalService { get; }
 
         public SimpleTestContainer()
@@ -26,7 +27,8 @@ namespace DDD.CarRentalConsole
             var uoW = new MemoryCarRentalUoW(
                 new MemoryRepository<Driver>(),
                 new MemoryRepository<Car>(),
-                new MemoryRepository<Rental>()
+                new MemoryRepository<Rental>(),
+                new MemoryRepository<Office>()
             );
 
             var freeMinutesPolicyFactory = new FreeMinutesPolicy();
@@ -35,12 +37,14 @@ namespace DDD.CarRentalConsole
             var carMapper = new CarMapper();
             var driverMapper = new DriverMapper();
             var rentalMapper = new RentalMapper();
+            var officeMapper = new OfficeMapper();
 
 
-            this.DriverService = new DriverService(uoW, driverMapper, domainEventPublisher);
-            this.CarService = new CarService(uoW, carMapper, domainEventPublisher);
-            this.RentalService = new RentalService(uoW, rentalMapper, domainEventPublisher, rentalFactory, freeMinutesPolicyFactory);
-            this.FinishRentalService = new StopRentalService(uoW, domainEventPublisher);
+            DriverService = new DriverService(uoW, driverMapper, domainEventPublisher);
+            CarService = new CarService(uoW, carMapper, domainEventPublisher);
+            RentalService = new RentalService(uoW, rentalMapper, domainEventPublisher, rentalFactory, freeMinutesPolicyFactory);
+            FinishRentalService = new StopRentalService(uoW, domainEventPublisher);
+            OfficeService = new OfficeService(uoW, officeMapper, domainEventPublisher);
         }
     }
 }

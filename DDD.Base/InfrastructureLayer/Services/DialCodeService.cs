@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DDD.CarRentalLib.DomainModelLayer.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace DDD.Base.InfrastructureLayer.Services
 {

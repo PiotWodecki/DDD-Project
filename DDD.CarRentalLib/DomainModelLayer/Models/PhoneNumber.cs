@@ -7,8 +7,8 @@ namespace DDD.CarRentalLib.DomainModelLayer.Models
 {
     public class PhoneNumber : ValueObject
     {
-        public string Number { get; private set; }
-        public DialCode AreaCode { get; private set; }
+        public string Number { get; protected set; }
+        public DialCode AreaCode { get; protected set; }
 
         public PhoneNumber(string number, DialCode areaCode)
         {

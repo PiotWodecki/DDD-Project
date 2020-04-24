@@ -20,7 +20,8 @@ namespace DDD.CarRentalLib.DomainModelLayer.Models
         public OpenClose IsOpen { get; set; }
         public PhoneNumber PhoneNumber { get; set; }
 
-        public Office(Guid id, string director, Address address, string openFrom, string openTo, OpenClose isOpen, PhoneNumber phoneNumber, IDomainEventPublisher domainEventPublisher) : base(id, domainEventPublisher)
+        public Office(Guid id, string director, Address address, string openFrom, string openTo, OpenClose isOpen, PhoneNumber phoneNumber,
+            IDomainEventPublisher domainEventPublisher) : base(id, domainEventPublisher)
         {
             Director = director;
             Address = address;

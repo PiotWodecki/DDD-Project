@@ -1,8 +1,11 @@
 ﻿using DDD.CarRentalLib.ApplicationLayer.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using DDD.Base.ApplicationLayer.DTOs;
 using DDD.CarRentalLib.ApplicationLayer.DTOs;
+using DDD.CarRentalLib.DomainModelLayer.Models;
 using DDD.CarRentalLib.DomainModelLayer.Services;
 
 namespace DDD.CarRentalConsole
@@ -12,14 +15,16 @@ namespace DDD.CarRentalConsole
         private IDriverService _driverService;
         private ICarService _carService;
         private IRentalService _rentalService;
+        private IOfficeService _officeService;
         private StopRentalService _finishRentalService;
 
-        public ScenarioHelper(IDriverService driverService, ICarService carService, IRentalService rentalService, StopRentalService finishRentalService)
+        public ScenarioHelper(IDriverService driverService, ICarService carService, IRentalService rentalService, IOfficeService officeService, StopRentalService finishRentalService)
         {
             _driverService = driverService;
             _carService = carService;
             _rentalService = rentalService;
             _finishRentalService = finishRentalService;
+            _officeService = officeService;
         }
 
         public Guid CreateDriver(string firstName, string lastName, string licenseNumber)
@@ -71,6 +76,58 @@ namespace DDD.CarRentalConsole
             return carId;
         }
 
+        public Guid CreateOffice(string director, string openFrom, string openTo)
+        {
+            var officeId = Guid.NewGuid();
+
+            var postalCode = new PostalCodeDTO()
+            {
+                FirstPart = "30",
+                SecondPart = "002"
+            };
+
+            var address = new AddressDTO
+            {
+                PostalCode = postalCode,
+                Country = "Poland",
+                County = "krakowski",
+                Locality = "Kraków",
+                Street = "Jana Pawła II",
+                Province = "małopolskie",
+                Parish = "Kraków",
+                LocalNumber = "2",
+                BuildingNumber = "1"
+            };
+
+            var dialCode = new DialCodeDTO
+            {
+                Code = "PL",
+                Country = "Poland",
+                Prefix = "+48"
+            };
+
+            var phoneNumber = new PhoneNumberDTO
+            {
+                AreaCode = dialCode,
+                Number = "322655766"
+            };
+
+            var office = new OfficeDTO
+            {
+                Id = officeId,
+                PhoneNumber = phoneNumber,
+                OpenFrom = openFrom,
+                OpenTo = openTo,
+                IsOpen = OpenCloseDTO.Open,
+                Address = address,
+                Director = director
+            };
+
+            _officeService.CreateNewOffice(office);
+
+            return officeId;
+        }
+
         public Guid StartRental(Guid driverId, Guid carId)
         {
             Guid rentalId = Guid.NewGuid();
@@ -111,7 +168,6 @@ namespace DDD.CarRentalConsole
 
         public void ShowRentals()
         {
-            Console.WriteLine("********Rentals!*****");
             List<RentalDTO> rentals = this._rentalService.GetAllRentals();
             foreach (RentalDTO rental in rentals)
             {
@@ -120,5 +176,39 @@ namespace DDD.CarRentalConsole
                 Console.WriteLine("##########################################");
             }
         }
+
+        public void ShowOfficesAddresses()
+        {
+            Console.WriteLine("OFFICES Addresses");
+
+            List<OfficeDTO> offices = _officeService.GetAllOfficeAddress();
+            foreach (var office in offices)
+            {
+                Console.WriteLine($"Office Director: {office.Director} \n Address:\n" +
+                                  $"Postal code: {office.Address.PostalCode.FirstPart}-{office.Address.PostalCode.SecondPart}\n" +
+                                  $"Country: {office.Address.Country}\n" +
+                                  $"County: {office.Address.County}\n" +
+                                  $"Parish: {office.Address.Parish}\n" +
+                                  $"Province: {office.Address.Province}\n" +
+                                  $"Locality: {office.Address.Locality}\n" +
+                                  $"Street: {office.Address.Street}\n" +
+                                  $"Building number: {office.Address.BuildingNumber}\n" +
+                                  $"Local number: {office.Address.LocalNumber}");
+                Console.WriteLine("##########################################");
+            }
+        }
+
+        public void ShowOfficesPhoneNumbers()
+        {
+            Console.WriteLine("OFFICES phone numbers");
+
+            List<OfficeDTO> offices = _officeService.GetAllOfficePhoneNumber();
+            foreach (var office in offices)
+            {
+                Console.WriteLine($"Office Director: {office.Director} \nPhoneNumber:{office.PhoneNumber.AreaCode.Prefix} {office.PhoneNumber.Number}\n" +
+                                  $"{office.PhoneNumber.AreaCode.Code}, {office.PhoneNumber.AreaCode.Country}");
+                Console.WriteLine("##########################################");
+            }
+        } 
     }
 }

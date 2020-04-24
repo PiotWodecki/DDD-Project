@@ -28,7 +28,7 @@ namespace DDD.CarRentalLib.ApplicationLayer.Services
 
         public void CreateNewOffice(OfficeDTO officeDTO)
         {
-            Expression<Func<Office, bool>> expressionPredicate = o => o.Id == o.Id;
+            Expression<Func<Office, bool>> expressionPredicate = o => o.Id == officeDTO.Id;
             var office = this._uoW.OfficeRepository.Find(expressionPredicate).FirstOrDefault();
             if (office != null)
             {
@@ -60,7 +60,13 @@ namespace DDD.CarRentalLib.ApplicationLayer.Services
 
         public List<OfficeDTO> GetAllOfficeAddress()
         {
-            throw new NotImplementedException();
+            IList<Office> offices = _uoW.OfficeRepository.GetAll();
+            List<OfficeDTO> dtoResults = _officeMapper.Map(offices);
+            var addressService = new AddressService(_domainEventPublisher, _uoW);
+
+            dtoResults.Select(o => o.Address = _officeMapper.Map(addressService.GetOfficeFullAddress(o.Id))).ToList();
+
+            return dtoResults;
         }
 
         public List<OfficeDTO> GetAllOfficePhoneNumber()

@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DDD.Base.DomainModelLayer.Models;
-using DDD.Base.InfrastructureLayer;
-using Newtonsoft.Json;
 
 namespace DDD.CarRentalLib.DomainModelLayer.Models
 {

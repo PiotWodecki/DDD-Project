@@ -8,7 +8,7 @@ using DDD.CarRentalLib.DomainModelLayer.Interfaces;
 
 namespace DDD.CarRentalLib.DomainModelLayer.Models
 {
-    public class Driver  :AggregateRoot
+    public class Driver : AggregateRoot
     {
         public string LicenseNumber { get; protected set; }
         public string FirstName { get; protected set; }

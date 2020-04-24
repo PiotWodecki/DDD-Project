@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using DDD.Base.ApplicationLayer.DTOs;
 
 namespace DDD.CarRentalLib.ApplicationLayer.DTOs

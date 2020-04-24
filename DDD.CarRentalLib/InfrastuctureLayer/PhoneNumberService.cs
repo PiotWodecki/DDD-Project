@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using DDD.Base.DomainModelLayer.Events;
 using DDD.Base.InfrastructureLayer.Services;
 using DDD.CarRentalLib.DomainModelLayer.Interfaces;

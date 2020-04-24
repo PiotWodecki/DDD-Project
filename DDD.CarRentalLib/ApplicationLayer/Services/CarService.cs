@@ -54,21 +54,6 @@ namespace DDD.CarRentalLib.ApplicationLayer.Services
                 this._uoW.Commit();
         }
 
-        public List<CarDTO> GetAllCarsWithCurrentPosition()
-        {
-            IList<Car> cars = this._uoW.CarRepository.GetAll();
-
-            List<CarDTO> dtoResult = this._carMapper.Map(cars);
-
-            var positionService = new PositionService(this._domainEventPublisher, this._uoW);
-
-            foreach (CarDTO car in dtoResult)
-            {
-                car.CurrentPosition = this._carMapper.Map(positionService.GetCarPosition(car.Id));
-            }
-
-            return dtoResult;
-        }
 
         public List<CarDTO> GetAllCarsWithPosition()
         {

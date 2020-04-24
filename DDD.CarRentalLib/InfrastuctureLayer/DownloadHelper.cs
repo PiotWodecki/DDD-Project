@@ -8,6 +8,7 @@ namespace DDD.CarRentalLib.InfrastuctureLayer
 {
     public class DownloadHelper
     {
+        //API do pobierania adresów po kodzie pocztowym
         public static void DownloadLocalitiesByPostalCode(PostalCode postalCode)
         {
             var url = new Uri($"http://kodpocztowy.intami.pl/api/{postalCode.FirstPart}-{postalCode.SecondPart}");
